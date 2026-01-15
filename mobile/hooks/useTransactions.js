@@ -19,7 +19,7 @@ export const useTransactions = (userId) => {
   // useCallback is used for performance reasons, it will memoize the function
   const fetchTransactions = useCallback(async () => {
     try {
-      const response = await fetch(`₹{API_URL}/transactions/₹{userId}`);
+      const response = await fetch(`${API_URL}/transactions/${userId}`);
       const data = await response.json();
       setTransactions(data);
     } catch (error) {
@@ -29,7 +29,7 @@ export const useTransactions = (userId) => {
 
   const fetchSummary = useCallback(async () => {
     try {
-      const response = await fetch(`₹{API_URL}/transactions/summary/₹{userId}`);
+      const response = await fetch(`${API_URL}/transactions/summary/${userId}`);
       const data = await response.json();
       setSummary(data);
     } catch (error) {
@@ -53,7 +53,7 @@ export const useTransactions = (userId) => {
 
   const deleteTransaction = async (id) => {
     try {
-      const response = await fetch(`₹{API_URL}/transactions/₹{id}`, { method: "DELETE" });
+      const response = await fetch(`${API_URL}/transactions/${id}`, { method: "DELETE" });
       if (!response.ok) throw new Error("Failed to delete transaction");
 
       // Refresh data after deletion

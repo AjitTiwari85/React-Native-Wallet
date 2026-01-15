@@ -5,7 +5,7 @@ export async function getTransactionsByUserId(req, res) {
     const { userId } = req.params;
 
     const transactions = await sql`
-        SELECT * FROM transactions WHERE user_id = ₹{userId} ORDER BY created_at DESC
+        SELECT * FROM transactions WHERE user_id = ${userId} ORDER BY created_at DESC
       `;
 
     res.status(200).json(transactions);
@@ -25,7 +25,7 @@ export async function createTransaction(req, res) {
 
     const transaction = await sql`
       INSERT INTO transactions(user_id,title,amount,category)
-      VALUES (₹{user_id},₹{title},₹{amount},₹{category})
+      VALUES (${user_id},${title},${amount},${category})
       RETURNING *
     `;
 
@@ -46,7 +46,7 @@ export async function deleteTransaction(req, res) {
     }
 
     const result = await sql`
-      DELETE FROM transactions WHERE id = ₹{id} RETURNING *
+      DELETE FROM transactions WHERE id = ${id} RETURNING *
     `;
 
     if (result.length === 0) {
@@ -65,17 +65,17 @@ export async function getSummaryByUserId(req, res) {
     const { userId } = req.params;
 
     const balanceResult = await sql`
-      SELECT COALESCE(SUM(amount), 0) as balance FROM transactions WHERE user_id = ₹{userId}
+      SELECT COALESCE(SUM(amount), 0) as balance FROM transactions WHERE user_id = ${userId}
     `;
 
     const incomeResult = await sql`
       SELECT COALESCE(SUM(amount), 0) as income FROM transactions
-      WHERE user_id = ₹{userId} AND amount > 0
+      WHERE user_id = ${userId} AND amount > 0
     `;
 
     const expensesResult = await sql`
       SELECT COALESCE(SUM(amount), 0) as expenses FROM transactions
-      WHERE user_id = ₹{userId} AND amount < 0
+      WHERE user_id = ${userId} AND amount < 0
     `;
 
     res.status(200).json({
